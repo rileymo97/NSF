@@ -7,7 +7,7 @@ import gensim.corpora as corpora
 from gensim.models import LdaModel
 
 
-def train_division_models(grants_df, num_topics=10, alpha=0.1, eta=0.05):
+def train_division_lda_models(grants_df, num_topics=10, alpha=0.1, eta=0.05):
     """
     Train separate LDA models for each division (Cell 8)
     """

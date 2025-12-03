@@ -1,58 +1,73 @@
 """
 Main workflow - replicates the notebook cells
 """
-
-import pandas as pd
 import spacy
-from . import constants
-from . import data_loading
-from . import data_cleaning
-from . import text_preprocessing
-from . import lda_modeling
-from . import export
-from . import models
+import os
+import sys
+from pathlib import Path
 
+# Handle imports for both package and direct execution
+try:
+    from . import data_loading, data_cleaning, text_preprocessing, lda_modeling, export
+except ImportError:
+    # If running directly, add parent directory to path
+    sys.path.insert(0, str(Path(__file__).parent))
+    import data_loading, data_cleaning, text_preprocessing, lda_modeling, export 
+
+from dotenv import load_dotenv
+load_dotenv()
+
+PROJECT_ROOT = Path(__file__).parent.parent
+NLP_PATH = PROJECT_ROOT / os.getenv("NLP_PATH", "models/en_core_web_sm")
 
 def main():
-    """
-    Main workflow function that replicates the notebook
-    """
-    # Cell 0: Load spaCy model
-    nlp = models.load_spacy_model('models/en_core_web_sm/en_core_web_sm-3.8.0')
+    # Load data
+    print("Loading data...")
+    grants_df = data_loading.load_grants_data()
+    terminated_awards = data_loading.load_terminated_awards()
+    print(f"Loaded {len(grants_df)} grants and {len(terminated_awards)} terminated awards")
     
-    # Cell 1: Load grants data
-    data_path = "data"
-    grants_df = data_loading.load_grants_data(data_path)
-    
-    # Cell 2: Load terminated awards
-    terminated_awards = data_loading.load_terminated_awards(data_path)
-    
-    # Cell 3: Add termination flag
+    # Add flag describing whether grant was terminated or not
+    print("Adding termination flags...")
     grants_df = data_cleaning.add_termination_flag(grants_df, terminated_awards)
     
-    # Cell 4: Add abstract column
-    grants_df = data_cleaning.add_abstract_column(grants_df)
+    # Add abstract column
+    print("Creating abstract column...")
+    grants_df['abstract'] = grants_df.apply(data_cleaning.add_abstract_column, axis=1)
     
-    # Cell 5: Add division names
+    # Add division names
+    print("Adding division names...")
     grants_df = data_cleaning.add_division_names(grants_df)
     
-    # Cell 6: Tokenize abstracts and build phrase models
-    stop_words = text_preprocessing.load_stopwords('models/stopwords/english')
-    grants_df, data, bigram_mod, trigram_mod = text_preprocessing.tokenize_abstracts(grants_df, stop_words)
+    # Tokenize abstracts and build phrase models
+    print("Tokenizing abstracts and building phrase models...")
+    grants_df, bigram_mod, trigram_mod = text_preprocessing.tokenize_abstracts(grants_df)
     
-    # Cell 7: Add keyphrases
-    grants_df = text_preprocessing.add_keyphrases(grants_df, bigram_mod, trigram_mod, nlp, stop_words)
+    # Add keyphrases
+    print("Extracting keyphrases...")
+    nlp = spacy.load(NLP_PATH, disable=['parser', 'ner']) # don't need parser or ner because we're only using lemmatization
+    grants_df["keyphrases"] = grants_df.apply(lambda row: text_preprocessing.process_words(row, bigram_mod, trigram_mod, nlp), axis=1)
     
-    # Cell 8: Train LDA models
+    # Save grants df to json file
+    print("Saving grants dataframe to JSON...")
+    grants_df.to_json(data_loading.DATA_PATH / 'grants_df.json')
+    
+    # Train LDA models
+    print("Training LDA models for each division...")
     num_topics = 10
     alpha = 0.1
     eta = 0.05
-    division_models = lda_modeling.train_division_models(grants_df, num_topics=num_topics, alpha=alpha, eta=eta)
+    division_models = lda_modeling.train_division_lda_models(grants_df, num_topics=num_topics, alpha=alpha, eta=eta)
     
-    # Cell 9: Export to Excel
-    excel_file = export.export_topics_to_excel(division_models, 'lda_topics_by_division.xlsx')
+    # Export topics to Excel
+    print("Exporting topics to Excel...")
+    excel_file = export.export_topics_to_excel(division_models, str(data_loading.DATA_PATH / 'lda_topics_by_division.xlsx'))
     
-    print(f"\nComplete! Results saved to: {excel_file}")
+    # Export document-topic assignments to CSV
+    print("Exporting document-topic assignments to CSV and JSON...")
+    doc_assignments_df = export.export_document_topic_assignments(division_models, str(data_loading.DATA_PATH))
+    
+    print(f"\nComplete! Results saved to:")
     
     return grants_df, division_models, excel_file
 
