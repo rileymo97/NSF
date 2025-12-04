@@ -1,17 +1,18 @@
 """
 Text preprocessing functions
 """
-
 import pandas as pd
 import gensim
-import gensim.corpora as corpora
-from gensim.utils import simple_preprocess
-from gensim.models.phrases import Phraser
+import os 
 
+from pathlib import Path
+import os
+PROJECT_ROOT = Path(__file__).parent.parent
+STOPWORDS_PATH = PROJECT_ROOT / os.getenv("STOPWORDS_PATH")
 
-def load_stopwords(stopwords_file='models/stopwords/english'):
+def load_stopwords(stopwords_file=STOPWORDS_PATH):
     """
-    Load stopwords from models folder (Cell 6)
+    Load stopwords from stored file 
     """
     with open(stopwords_file, 'r') as f:
         words = []
@@ -21,16 +22,21 @@ def load_stopwords(stopwords_file='models/stopwords/english'):
     return stop_words
 
 
-def tokenize_abstracts(grants_df, stop_words):
+def tokenize_abstracts(grants_df: pd.DataFrame) -> tuple[pd.DataFrame, 
+                                                         gensim.models.phrases.Phraser, 
+                                                         gensim.models.phrases.Phraser]:
     """
-    Build bigram and trigram models and tokenize abstracts (Cell 6)
-    Returns: (grants_df, data, bigram_mod, trigram_mod)
+    Build bigram and trigram models and tokenize abstracts 
+    Returns: (grants_df, bigram_mod, trigram_mod)
     """
+    # Load stopwords
+    stop_words = load_stopwords(STOPWORDS_PATH)
+    
     # Loop through each row in the df, tokenize the abstract and store in the df
     grants_df["tokenized_abstract"] = ""
     data = []
     for i, row in grants_df.iterrows():
-        tokens = [word for word in simple_preprocess(str(row["abstract"]), deacc=True, min_len=3) 
+        tokens = [word for word in gensim.utils.simple_preprocess(str(row["abstract"]), deacc=True, min_len=3) 
                  if word not in stop_words]
         grants_df.at[i, 'tokenized_abstract'] = tokens
         
@@ -45,13 +51,16 @@ def tokenize_abstracts(grants_df, stop_words):
     bigram_mod = gensim.models.phrases.Phraser(bigram)
     trigram_mod = gensim.models.phrases.Phraser(trigram)
     
-    return grants_df, data, bigram_mod, trigram_mod
+    return grants_df, bigram_mod, trigram_mod
 
 
-def process_words(row, bigram_mod, trigram_mod, nlp, stop_words, allowed_tags=['NOUN', 'ADJ', 'VERB', 'ADV']):
+def process_words(row, bigram_mod, trigram_mod, nlp, allowed_tags=['NOUN', 'ADJ', 'VERB', 'ADV']):
     """
-    Convert a document into a list of lowercase tokens, build bigrams-trigrams, implement lemmatization (Cell 7)
+    Convert a document into a list of lowercase tokens, build bigrams-trigrams, implement lemmatization 
     """
+    # Load stopwords
+    stop_words = load_stopwords(STOPWORDS_PATH)
+    
     tokens = row["tokenized_abstract"]
     
     # Apply bigram and trigram models to create phrases
@@ -77,15 +86,4 @@ def process_words(row, bigram_mod, trigram_mod, nlp, stop_words, allowed_tags=['
     # Combine phrases and lemmatized words, filter stopwords and short tokens
     result = phrases + lemmatized
     return [word for word in result if word not in stop_words and len(word) >= 3]
-
-
-def add_keyphrases(grants_df, bigram_mod, trigram_mod, nlp, stop_words):
-    """
-    Generate keyphrases from abstracts (Cell 7)
-    """
-    grants_df["keyphrases"] = grants_df.apply(
-        lambda row: process_words(row, bigram_mod, trigram_mod, nlp, stop_words),
-        axis=1
-    )
-    return grants_df
 
