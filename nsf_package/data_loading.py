@@ -20,7 +20,7 @@ def load_grants_data():
     rows = []
     
     # Loop through each year, 
-    for year in range(2019, 2025):
+    for year in range(2019, 2026):
         pattern = str(DATA_PATH / str(year) / "*.json")
         json_files = glob.glob(pattern)
         
