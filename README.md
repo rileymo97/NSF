@@ -29,7 +29,7 @@ A Gradio web application that rewrites NSF grant abstracts by replacing banned w
 NSF/
 ├── lda_modeling/          # LDA topic modeling pipeline
 ├── rewrite_nsf_abstract/  # Abstract rewriting web app
-├── data/                  # Grant data and outputs
+├── data/                  # Initializes with the list of canceled grants. To populate.
 ├── models/                # NLP models and word lists
 ├── notebooks/             # Exploratory analysis notebooks
 └── screenshots/           # Visualization examples

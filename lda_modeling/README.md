@@ -37,7 +37,8 @@ The pipeline automatically:
 ### 1. Data Preparation
 
 **Data Loading:**
-- Loads NSF grant data from JSON files (2019-2025)
+- Requires downloading and saving 2019 - 2025 NSF grant JSON [files](https://www.nsf.gov/awardsearch/download-awards) to data folder
+- Loads NSF data and appends them into a dataframe
 - Combines abstract fields and removes NSF mission statements
 - Maps division IDs to full names
 
