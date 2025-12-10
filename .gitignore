@@ -16,6 +16,8 @@ data/2024
 data/2025
 grants_df.json
 lda_topics_by_division.xlsx
+lda_topics_by_division_labeled.xlsx
+topic_assignments.json
 topic_assignments.csv
 clustered_subtopics_by_division.xlsx
 clustered_subtopic_percentages/
