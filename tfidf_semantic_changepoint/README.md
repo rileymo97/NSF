@@ -2,8 +2,6 @@
 
 This package analyzes NSF grant abstracts using TF-IDF analysis, semantic similarity metrics, and Bayesian changepoint detection to identify shifts in research language and topics over time.
 
-[← Back to Main README](../README.md)
-
 ## Package Structure
 
 ```
@@ -125,3 +123,4 @@ changepoint_detection.plot_changepoint_posterior(cp_trace)
 - Changepoint detection uses Bayesian inference with MCMC sampling
 - Results may vary slightly due to stochastic sampling
 
+[Back to Main README](../README.md)
