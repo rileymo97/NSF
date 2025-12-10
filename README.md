@@ -23,16 +23,27 @@ A Gradio web application that rewrites NSF grant abstracts by replacing banned w
 - Preserves scientific accuracy and tone
 - Web-based interface
 
+### 3. [TF-IDF, Semantic Similarity, and Changepoint Analysis](tfidf_semantic_changepoint/README.md)
+
+Analysis package that examines NSF grant abstracts using TF-IDF analysis, semantic similarity metrics, and Bayesian changepoint detection to identify shifts in research language and topics over time.
+
+**Features:**
+- TF-IDF analysis of DEI-related keywords
+- Semantic similarity using sentence embeddings
+- Bayesian changepoint detection to identify structural breaks
+- Division-specific and pooled analyses
+
 ## Repository Structure
 
 ```
 NSF/
-├── lda_modeling/          # LDA topic modeling pipeline
-├── rewrite_nsf_abstract/  # Abstract rewriting web app
-├── data/                  # Initializes with the list of canceled grants. To populate.
-├── models/                # NLP models and word lists
-├── notebooks/             # Exploratory analysis notebooks
-└── screenshots/           # Visualization examples
+├── lda_modeling/                    # LDA topic modeling pipeline
+├── rewrite_nsf_abstract/            # Abstract rewriting web app
+├── tfidf_semantic_changepoint/      # TF-IDF and changepoint analysis
+├── data/                             # Grant data and outputs
+├── models/                           # NLP models and word lists
+├── notebooks/                        # Exploratory analysis notebooks
+└── screenshots/                      # Visualization examples
 ```
 
 ## Data
