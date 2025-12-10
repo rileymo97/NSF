@@ -1,5 +1,5 @@
 """
-Main workflow - replicates the notebook cells
+Main workflow for NSF grant data processing and LDA topic modeling.
 """
 import spacy
 import os
@@ -8,15 +8,16 @@ from pathlib import Path
 
 # Handle imports for both package and direct execution
 try:
-    from . import data_loading, data_cleaning, text_preprocessing, lda_modeling, export
+    from . import data_loading, data_cleaning, text_preprocessing, lda_modeling, export, subtopic_clustering
 except ImportError:
     # If running directly, add parent directory to path
     sys.path.insert(0, str(Path(__file__).parent))
-    import data_loading, data_cleaning, text_preprocessing, lda_modeling, export 
+    import data_loading, data_cleaning, text_preprocessing, lda_modeling, export, subtopic_clustering 
 
 from dotenv import load_dotenv
 load_dotenv()
 
+from data_loading import DATA_PATH
 PROJECT_ROOT = Path(__file__).parent.parent
 NLP_PATH = PROJECT_ROOT / os.getenv("NLP_PATH", "models/en_core_web_sm")
 
@@ -45,12 +46,12 @@ def main():
     
     # Add keyphrases
     print("Extracting keyphrases...")
-    nlp = spacy.load(NLP_PATH, disable=['parser', 'ner']) # don't need parser or ner because we're only using lemmatization
+    nlp = spacy.load(NLP_PATH, disable=['parser', 'ner'])  # Only lemmatization needed
     grants_df["keyphrases"] = grants_df.apply(lambda row: text_preprocessing.process_words(row, bigram_mod, trigram_mod, nlp), axis=1)
     
     # Save grants df to json file
     print("Saving grants dataframe to JSON...")
-    grants_df.to_json(data_loading.DATA_PATH / 'grants_df.json')
+    grants_df.to_json(DATA_PATH / 'grants_df.json')
     
     # Train LDA models
     print("Training LDA models for each division...")
@@ -59,13 +60,29 @@ def main():
     eta = 0.05
     division_models = lda_modeling.train_division_lda_models(grants_df, num_topics=num_topics, alpha=alpha, eta=eta)
     
-    # Export topics to Excel
+    # Export topics to Excel file
     print("Exporting topics to Excel...")
-    excel_file = export.export_topics_to_excel(division_models, str(data_loading.DATA_PATH / 'lda_topics_by_division.xlsx'))
+    excel_file = export.export_topics_to_excel(division_models, str(DATA_PATH / 'lda_topics_by_division.xlsx'))
     
     # Export document-topic assignments to CSV
     print("Exporting document-topic assignments to CSV and JSON...")
-    doc_assignments_df = export.export_document_topic_assignments(division_models, str(data_loading.DATA_PATH))
+    doc_assignments_df = export.export_document_topic_assignments(division_models, str(DATA_PATH))
+    
+    # Optional: Manually re-label topics in Excel file for visualization
+    # If labeled file exists, it will be used; otherwise uses default file
+    
+    # Perform subtopic clustering
+    if os.exists(DATA_PATH / 'lda_topics_by_division_labeled.xlsx'):
+        excel_path = str(DATA_PATH / 'lda_topics_by_division_labeled.xlsx')
+    else:
+        excel_path = str(DATA_PATH / 'lda_topics_by_division.xlsx')
+        
+    topic_assignments_path = str(DATA_PATH / 'topic_assignments.csv')
+    subtopic_clustering.main(
+        excel_path, 
+        topic_assignments_path, 
+        cluster_threshold=0.15
+    )
     
     print(f"\nComplete! Results saved to:")
     

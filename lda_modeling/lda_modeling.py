@@ -9,7 +9,16 @@ from gensim.models import LdaModel
 
 def train_division_lda_models(grants_df, num_topics=10, alpha=0.1, eta=0.05):
     """
-    Train separate LDA models for each division (Cell 8)
+    Train separate LDA models for each division.
+    
+    Args:
+        grants_df: DataFrame containing grant data with keyphrases
+        num_topics: Number of topics per division (default 10)
+        alpha: LDA alpha parameter (default 0.1)
+        eta: LDA eta parameter (default 0.05)
+        
+    Returns:
+        Dictionary mapping division names to model data dictionaries
     """
     # Dictionary to store models and metadata for each division
     division_models = {}

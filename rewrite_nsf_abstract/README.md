@@ -13,77 +13,8 @@ uv run pip install -r requirements.txt
 
 2. Set environment variables:
 ```bash
-export API_KEY="your-google-gemini-api-key" # Replace with your actual API key
-export BANNED_WORDS='[
-    "activism",
-    "activists",
-    "advocacy",
-    "advocate",
-    "barrier",
-    "barriers",
-    "biased",
-    "bias",
-    "BIPOC",
-    "Black and Latinx",
-    "community diversity",
-    "community equity",
-    "cultural differences",
-    "cultural heritage",
-    "culturally responsive",
-    "disabilities",
-    "discrimination",
-    "discriminatory",
-    "backgrounds",
-    "groups",
-    "diversified",
-    "diversify",
-    "enhancing",
-    "equal opportunity",
-    "equality",
-    "equitable",
-    "ethnicity",
-    "excluded",
-    "female",
-    "fostering",
-    "gender",
-    "hate speech",
-    "Hispanic minority",
-    "historically",
-    "implicit bias",
-    "inclusion",
-    "inclusive",
-    "increase",
-    "indigenous community",
-    "inequalities",
-    "inequities",
-    "institutional",
-    "LGBTQ",
-    "marginalize",
-    "minorities",
-    "multicultural",
-    "polarization",
-    "political",
-    "prejudice",
-    "privileges",
-    "promoting",
-    "race",
-    "racial",
-    "justice",
-    "sense of belonging",
-    "sexual preferences",
-    "social justice",
-    "sociocultural",
-    "socioeconomic",
-    "status",
-    "stereotypes",
-    "systemic",
-    "trauma",
-    "underappreciated",
-    "underrepresented",
-    "underserved",
-    "victim",
-    "women"
-]''
+export API_KEY="your-google-gemini-api-key" # Must replace with actual Google API key
+export BANNED_WORDS=['banned', 'words'] # Must replace with actual list, located in models folder
 ```
 
 3. Run the app:
@@ -100,3 +31,8 @@ uv run python app.py
    - Rewrite sentences with banned words using neutral alternatives
    - Maintain the same structure, tone, and style
 
+Example: 
+
+![Research on Innovative Technologies Trends](../screenshots/Rewrite_Example.png)
+
+## [Back to Main README](../README.md)

@@ -39,7 +39,13 @@ def add_abstract_column(row: pd.Series) -> str:
 
 def add_division_names(grants_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Apply division name mapping to grants datagrame
+    Apply division name mapping to grants dataframe.
+    
+    Args:
+        grants_df: DataFrame with division abbreviations
+        
+    Returns:
+        DataFrame with division_name column added
     """
     grants_df['division_name'] = grants_df['div_abbr'].map(DIVISION_NAMES)
     return grants_df
