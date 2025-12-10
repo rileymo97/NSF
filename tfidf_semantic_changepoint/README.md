@@ -101,8 +101,8 @@ cp_trace = changepoint_detection.fit_changepoint_model(drift_df)
 changepoint_detection.plot_changepoint_posterior(cp_trace)
 ```
 ![Example:](../screenshots/change_point_all.png)
-![Example:](../screenshots/change_point_4_selected)
-![Example:](../screenshots/change_point_polar)
+![Example:](../screenshots/change_point_4_selected.png)
+![Example:](../screenshots/change_point_polar.png)
 
 ## Output Files
 
