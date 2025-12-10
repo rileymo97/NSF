@@ -40,10 +40,10 @@ NSF/
 ├── tfidf_semantic_changepoint/      # TF-IDF and changepoint analysis
 ├── lda_modeling/                    # LDA topic modeling pipeline
 ├── rewrite_nsf_abstract/            # Abstract rewriting web app
-├── data/                             # Grant data and outputs
-├── models/                           # NLP models and word lists
-├── notebooks/                        # Exploratory analysis notebooks
-└── screenshots/                      # Visualization examples
+├── data/                            # Grant data and outputs
+├── models/                          # NLP models and word lists
+├── notebooks/                       # Exploratory analysis notebooks
+└── screenshots/                     # Visualization examples
 ```
 
 ## Data
