@@ -2,6 +2,9 @@
 
 This repository contains tools and analyses for processing and understanding NSF (National Science Foundation) grant data from 2019-2025.
 
+This project was precipitated by a conversation Riley's partner, who is applying for NSF grants in ecology, gender and climate science. The NSF funds hundreds of millions of dollars to grad students every year for science research in many areas. Riley's partner expressed some worry because there were rumors about political interference in the selection process and shared a banned words lists she had seen leaked. Futher, there was news that the NSF was canceling grants, leading researchers to try to adjust or self censor their grant applications to be more acceptable to the current administration. Within this context, our group thought it would be interesting to examine the grants that were awarded money over the last few years and see if we could do some text data analysis to see if any of those qualitative observations were visible in the data. 
+
+
 ## Tools
 
 ### 1. [TF-IDF, Semantic Similarity, and Changepoint Analysis](tfidf_semantic_changepoint/README.md)
