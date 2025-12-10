@@ -224,4 +224,3 @@ marimo/_lsp/
 __marimo__/
 .DS_Store
 dir_to_ignore/
-data
