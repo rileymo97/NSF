@@ -91,6 +91,7 @@ The pipeline automatically:
 
 **Hierarchical Clustering:**
 - Ward linkage with cosine distance
+- Hierarchical dendrogram visualizations
 - Distance threshold: 0.15 (configurable)
 - Groups semantically similar topics within each division
 - Cluster names combine original topic names
