@@ -90,12 +90,9 @@ from tfidf_semantic_changepoint import semantic_similarity
 drift_df = semantic_similarity.compute_semantic_drift(df)
 semantic_similarity.plot_similarity_heatmap(df, "Physics")
 ```
+![Example:](../screenshots/Atmospheric_and_geospace_sciences.png)
 ![Example:](../screenshots/2020.png)
-![Example:](../screenshots/integrative_organismal_systems.png)
-![Example:](../screenshots/physics.png)
-![Example:](../screenshots/polar_programs.png)
-![Example:](../screenshots/social_and_economic_sciences.png)
-![Example:](../screenshots/stem_education.png)
+![Example:](../screenshots/quad.png)
 
 **Changepoint Detection:**
 ```python
