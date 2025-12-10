@@ -90,7 +90,6 @@ from tfidf_semantic_changepoint import semantic_similarity
 drift_df = semantic_similarity.compute_semantic_drift(df)
 semantic_similarity.plot_similarity_heatmap(df, "Physics")
 ```
-![Example:](../screenshots/Atmospheric_and_geospace_sciences.png)
 ![Example:](../screenshots/2020.png)
 ![Example:](../screenshots/quad.png)
 
@@ -101,6 +100,9 @@ from tfidf_semantic_changepoint import changepoint_detection
 cp_trace = changepoint_detection.fit_changepoint_model(drift_df)
 changepoint_detection.plot_changepoint_posterior(cp_trace)
 ```
+![Example:](../screenshots/change_point_all.png)
+![Example:](../screenshots/change_point_4_selected)
+![Example:](../screenshots/change_point_polar)
 
 ## Output Files
 
